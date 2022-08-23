@@ -1,0 +1,36 @@
+
+<% for x in @show_crypto %>
+    <% if @crypto.simbolo == x["symbol"] %>
+        <% crypto_name = x["name"] %> 
+        <% crypto_price = number_to_currency(x["quote"]["USD"]["price"]) %> 
+        
+           
+    <% end %>
+<% end %>
+
+
+
+
+
+<div class="card">
+  <div class="card-header">
+    <strong><%= @crypto.simbolo %></strong>
+  
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"><strong><%= crypto_name %> </strong> </h5>
+    <p class="card-text">Precio actual: <%= crypto_price %></p>
+    <p class="card-text">Pagado a: <%= @crypto.cost_per %></p>
+    <p class="card-text">Cantidad: <%= @crypto.amount_owned %></p>
+
+    <%= link_to 'Editar', edit_crypto_path(@crypto),class:"btn btn-outline-primary" %> 
+    <%= link_to 'Borrar', crypto_path(@crypto), method: :delete, data: { confirm: 'Estás seguro?' },class:"btn btn-outline-primary" %>
+    <%= link_to 'Atras', cryptos_path, class:"btn btn-outline-primary" %> 
+  </div>
+</div>
+
+
+
+
+
+

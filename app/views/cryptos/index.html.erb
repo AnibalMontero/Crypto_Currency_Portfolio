@@ -1,0 +1,51 @@
+
+<h1>Criptomonedas</h1>
+<div class="table-responsive">
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Precio Actual</th>
+      <th scope="col">Invertido</th>
+      <th scope="col">Se Cobraría</th>
+      <th scope="col">Ganancia/Perdida</th>
+      <th scope="col">Precio inicial</th>
+      <th scope="col">Cantidad</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cryptos.each do |crypto| %>
+      <% if crypto.user_id == current_user.id %>
+        <% if crypto.simbolo %>
+          <% crypto.simbolo = crypto.simbolo.upcase %>
+        <% end %>
+        <tr scope="row">
+        <% for x in @lookup_crypto %>
+          <% if crypto.simbolo == x["symbol"] %>
+            <td><%= link_to x["name"], crypto %> </td>
+            <td>$<%= number_with_precision(x["quote"]["USD"]["price"], :precision=>2) %> </td>
+            <td>$<%= crypto.cost_per * crypto.amount_owned %> </td>
+            <td>$<%= number_with_precision((x["quote"]["USD"]["price"].to_d * crypto.amount_owned), :precision=>2) %> </td>
+            <td>$<%= number_with_precision(((x["quote"]["USD"]["price"].to_d * crypto.amount_owned) - (crypto.amount_owned  * crypto.cost_per)), :precision=>2)  %>  </td>
+            <% @ganapierde +=  (x["quote"]["USD"]["price"].to_d * crypto.amount_owned) - (crypto.amount_owned  * crypto.cost_per)  %>
+          <% end %>
+        <% end %>
+
+          <td><%= crypto.cost_per %></td>
+          <td><%= crypto.amount_owned %></td>
+          
+        </tr>
+        <% end %>
+    <% end %>
+  </tbody>
+</table>
+</div>
+<br/>
+<br/>
+<strong>Portfolio Ganancias/Perdidas: </strong> <%= number_to_currency(@ganapierde) %> 
+<br/>
+<br/>
+
+<%= link_to 'Nueva Cripto', new_crypto_path, class:"btn btn-outline-success" %>
